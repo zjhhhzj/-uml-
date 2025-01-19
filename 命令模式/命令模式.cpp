@@ -1,84 +1,84 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
+//将请求(命令)封装成一个对象，从而可以用不同的请求、队列或者日志来参数化对象，同时支持可撤销的操作（将请求的调用者和接收者解耦。）
+
+// Command（命令接口）：定义一个执行操作的接口。
+// ConcreteCommand（具体命令类）：实现命令接口，绑定一个接收者对象，调用接收者的相关操作。
+// Receiver（接收者）：执行实际操作的类。
+// Invoker（调用者）：持有命令对象并调用命令。
+
 //举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+#include <iostream>
+#include <memory>
+using namespace std;
 
-// 定义角色类
-class Character
-{
+// 接收者类：灯
+class Light {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    void turnOn() { cout << "The light is ON." << endl; }
+    void turnOff() { cout << "The light is OFF." << endl; }
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
+// 命令接口
+class Command {
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
+    virtual void execute() = 0; // 执行命令
+    virtual ~Command() {}
 };
 
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
+// 具体命令类：打开灯
+class LightOnCommand : public Command {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    Light* light; // 持有接收者的引用
+public:
+    LightOnCommand(Light* l) : light(l) {}
+    void execute() override {
+        light->turnOn();
     }
-    
+};
+
+// 具体命令类：关闭灯
+class LightOffCommand : public Command {
+private:
+    Light* light; // 持有接收者的引用
+public:
+    LightOffCommand(Light* l) : light(l) {}
+    void execute() override {
+        light->turnOff();
+    }
+};
+
+// 调用者类：遥控器
+class RemoteControl {
+private:
+    Command* command; // 当前命令
+public:
+    void setCommand(Command* cmd) {
+        command = cmd;
+    }
+    void pressButton() {
+        if (command) {
+            command->execute();
+        }
+    }
+};
+
+// 客户端代码
+int main() {
+    // 创建接收者
+    Light light;
+
+    // 创建具体命令
+    LightOnCommand lightOn(&light);
+    LightOffCommand lightOff(&light);
+
+    // 创建调用者
+    RemoteControl remote;
+
+    // 设置命令并执行
+    remote.setCommand(&lightOn);
+    remote.pressButton(); // 输出：The light is ON.
+
+    remote.setCommand(&lightOff);
+    remote.pressButton(); // 输出：The light is OFF.
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

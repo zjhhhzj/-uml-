@@ -1,84 +1,62 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//为子系统中的一组接口提供一个统一的高层接口，使得子系统更容易使用。它通过定义一个“外观类”（Facade），隐藏子系统的复杂性，简化客户端对子系统的访问
 
-// 定义角色类
-class Character
-{
+// Facade（外观类）：提供一个高层接口，客户端通过它访问子系统的功能。
+// Subsystem Classes（子系统类）：实现子系统的具体功能。子系统可以有多个类，外观类负责调用它们。
+// Client（客户端）：通过外观类与子系统交互，而不直接访问子系统类。
+
+//举例: 有多个子系统（如音响、投影仪、灯光等），通过外观类统一控制
+
+#include <iostream>
+using namespace std;
+
+// 子系统类 1：音响
+class SoundSystem {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    void turnOn() { cout << "Sound system is ON." << endl; }
+    void turnOff() { cout << "Sound system is OFF." << endl; }
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
+// 子系统类 2：投影仪
+class Projector {
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
+    void turnOn() { cout << "Projector is ON." << endl; }
+    void turnOff() { cout << "Projector is OFF." << endl; }
 };
 
-// 法师角色
-class Chct_Mage : public Character
-{
+// 子系统类 3：灯光
+class Lighting {
 public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
+    void dim() { cout << "Lighting is dimmed." << endl; }
+    void brighten() { cout << "Lighting is brightened." << endl; }
 };
 
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+// 外观类：家庭影院控制器
+class HomeTheaterFacade {
+private:
+    SoundSystem soundSystem;
+    Projector projector;
+    Lighting lighting;
+
+public:
+    void startMovie() {
+        cout << "Starting movie..." << endl;
+        soundSystem.turnOn();
+        projector.turnOn();
+        lighting.dim();
     }
-    
+
+    void endMovie() {
+        cout << "Ending movie..." << endl;
+        lighting.brighten();
+        projector.turnOff();
+        soundSystem.turnOff();
+    }
+};
+
+// 客户端代码
+int main() {
+    HomeTheaterFacade homeTheater;
+    homeTheater.startMovie();  // 一键启动家庭影院
+    homeTheater.endMovie();    // 一键关闭家庭影院
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

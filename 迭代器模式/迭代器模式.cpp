@@ -1,84 +1,95 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+// 用于提供一种顺序访问聚合对象中各个元素的方法，而无需暴露其内部表示。它将遍历逻辑与集合的实现分离
 
-// 定义角色类
-class Character
+// Iterator（抽象迭代器）：定义访问和遍历元素的接口，例如 next() 方法。
+// ConcreteIterator（具体迭代器）：实现 Iterator 接口，并维护遍历状态（如当前索引）。
+// Aggregate（抽象聚合类）：定义创建迭代器的接口（createIterator()）。
+// ConcreteAggregate（具体聚合类）：实现 Aggregate 接口，提供存储和管理元素的功能，并返回一个具体迭代器。
+
+// 举例，自定义vector代码
+
+// 抽象迭代器模板
+template <typename T>
+class Iterator
 {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    virtual void First() = 0;
+    virtual bool IsEnd() = 0;
+    virtual void Next() = 0;
+    virtual T &Get() = 0;
+    virtual ~Iterator() {}
 };
 
-// 战士角色
-class Chct_Warrior : public Character
+// 抽象聚合类模板
+template <typename T>
+class Aggregate
 {
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
+    virtual Iterator<T>* createIterator() = 0;
+    virtual int GetSize() = 0;
+    virtual T& GetItem(int index) = 0;
 };
 
-// 法师角色
-class Chct_Mage : public Character
+// 具体迭代器
+template <typename T>
+class ConcreteIterator : public Iterator<T>
 {
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
+    Aggregate<T> *pAgrt;
+    int currentPosition;
 
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+public:
+    ConcreteIterator(Aggregate<T> *agg) : pAgrt(agg), currentPosition(0) {}
+
+    void next() override
+    {
+        if (currentPosition < pAgrt->GetSize())
+            ++currentPosition;
     }
-    
+    void First() override
+    {
+        currentPosition = 0;
+    }
+    bool IsEnd() override
+    {
+        return currentPosition >= pAgrt->GetSize();
+    }
+    T &Get() override
+    {
+        return pAgrt->GetItem(currentPosition);
+    }
+};
+
+// 具体聚合类
+template <typename T>
+class ConcreteAggregate : public Aggregate<T>
+{
+private:
+    T elem[10];
+
+public:
+    virtual Iterator<T> *createIterator() override
+    {
+        return new ConcreteIterator<T>(this);
+    }
+    virtual int GetSize() override
+    {
+        return 10;
+    }
+    virtual T &GetItem(int index) override
+    {
+        return elem[index];
+    }
+};
+
+// 测试代码
+int main()
+{
+    Aggregate<int> *pAgg = new ConcreteAggregate<int>;
+    Iterator<int> *iter = pAgg->createIterator();
+
+    for(iter->First();!iter->IsEnd();iter->Next())      //访问
+        iter->Get()++;                                  //操作
+
+    delete pAgg;
+    delete iter;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

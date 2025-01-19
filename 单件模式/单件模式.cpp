@@ -1,84 +1,57 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//确保一个类只有一个实例，并提供一个全局的访问点。它常用于需要控制全局共享资源（如配置管理器、日志记录器、数据库连接池等）的场景，适用于多线程
 
-// 定义角色类
-class Character
-{
-public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
+// 饿汉式: 类加载时就创建单例实例,优点：线程安全，简单实现。缺点：如果实例未被使用，会浪费资源。
+// 懒汉式: 在第一次调用 getInstance() 时才创建单例实例。优点：延迟加载，只有在需要时才创建实例，节省资源。缺点：需要注意线程安全问题，可能引发多线程环境下的并发问题
 
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
+//举例: 一个项目的配置文件
 
-public:
-    virtual void Burn();              // 技能：燃烧
+#include <iostream>
+#include <mutex> 
+using namespace std;
 
+class Singleton {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
-};
+    static Singleton* instance; // 静态指针，存储唯一实例
+    static mutex mtx;           // 互斥锁，用于线程安全
 
-// 战士角色
-class Chct_Warrior : public Character
-{
-public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    // 私有构造函数，禁止外部实例化
+    Singleton() {
+        cout << "Singleton instance created." << endl;
     }
-    
+
+public:
+    virtual ~Singleton(){
+        if(instance!=nullptr)delete instance;
+    }
+
+    // 禁止拷贝构造和赋值操作
+    Singleton(const Singleton&) = delete;
+    Singleton& operator=(const Singleton&) = delete;
+
+    // 静态方法，获取唯一实例
+    static Singleton* getInstance() {
+        if (instance == nullptr) { // 双重检查锁定
+            lock_guard<mutex> lock(mtx);
+            if (instance == nullptr) {
+                instance = new Singleton();
+            }
+        }
+        return instance;
+    }
+
+};
+
+// 初始化静态成员
+Singleton* Singleton::instance = nullptr;   //懒汉式
+mutex Singleton::mtx;
+
+int main() {
+    // 获取单例实例并调用方法
+    Singleton* s1 = Singleton::getInstance();
+
+    // 再次获取实例，验证是同一个对象
+    Singleton* s2 = Singleton::getInstance();
+    cout << "Are s1 and s2 the same? " << (s1 == s2 ? "Yes" : "No") << endl;
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

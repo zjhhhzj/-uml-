@@ -1,84 +1,83 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//允许动态地向对象添加新的行为，而不改变其原始代码或结构。它是通过将对象嵌套在装饰器对象中实现的，这些装饰器对象可以在保持接口一致的同时扩展对象的功能
 
-// 定义角色类
-class Character
-{
+// Component(抽象组件)：定义对象的接口，确保装饰器和被装饰对象具有一致的接口。
+// ConcreteComponent(具体组件)：实现 Component 接口的具体类，表示要被装饰的对象。
+// Decorator(抽象装饰器类)：持有一个 Component 类型的引用，并定义与 Component 一致的接口。(与Component既是继承关系也是组合关系，与具体组件同一水平)
+// ConcreteDecorator(具体的装饰器类)：，扩展 Decorator，通过重写方法为对象添加额外行为。
+
+//举例，文本编辑器，有加粗，斜体的功能
+// 抽象组件
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 抽象组件
+class Component {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    virtual ~Component() {}
+    virtual string operation() = 0; // 定义接口
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
+// 具体组件
+class ConcreteComponent : public Component {
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    string operation() override {
+        return "Text";
     }
-    
+};
+
+// 抽象装饰器
+class Decorator : public Component {
+protected:
+    Component* component; // 持有一个组件指针
+
+public:
+    Decorator(Component* comp) : component(comp) {}
+    virtual ~Decorator() { delete component; }
+
+    string operation() override {
+        return component->operation(); // 调用被装饰对象的方法
+    }
+};
+
+// 具体装饰器 A：添加加粗功能
+class BoldDecorator : public Decorator {
+public:
+    BoldDecorator(Component* comp) : Decorator(comp) {}
+
+    string operation() override {
+        return "<b>" + Decorator::operation() + "</b>"; // 添加加粗标签
+    }
+};
+
+// 具体装饰器 B：添加斜体功能
+class ItalicDecorator : public Decorator {
+public:
+    ItalicDecorator(Component* comp) : Decorator(comp) {}
+
+    string operation() override {
+        return "<i>" + Decorator::operation() + "</i>"; // 添加斜体标签
+    }
+};
+
+// 测试代码
+int main() {
+    // 创建一个具体组件
+    Component* text = new ConcreteComponent();
+
+    // 添加加粗功能
+    Component* boldText = new BoldDecorator(text);
+
+    // 在加粗的基础上再添加斜体功能
+    Component* boldItalicText = new ItalicDecorator(boldText);
+
+    // 输出结果
+    cout << "Original: " << text->operation() << endl;
+    cout << "Bold: " << boldText->operation() << endl;
+    cout << "Bold + Italic: " << boldItalicText->operation() << endl;
+
+    // 清理内存
+    delete boldItalicText; // 会递归删除所有装饰器和组件
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

@@ -1,22 +1,22 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>480</x><y>230</y><w>210</w><h>140</h></coordinates><panel_attributes>Character
+<diagram program="umletino" version="15.1"><zoom_level>12</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>492</x><y>312</y><w>252</w><h>144</h></coordinates><panel_attributes>HomeTheaterFacade
 --
-#life
-#magic
-#attack
+-soundSystem: SoundSystem
+-projector: Projector
+-lighting: Lighting
 --
-+Burn()
-/-Can_Use()/
-/-Effect_Enemy()/
-/-Effect_Self()/
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>360</y><w>30</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>430</y><w>430</w><h>90</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;10;10;410;10;410;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>670</x><y>500</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Mage
++startMovie()
++endMovie()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>480</x><y>564</y><w>252</w><h>84</h></coordinates><panel_attributes>Projector
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>490</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Warrior
++turnOn()
++turnOff()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>156</x><y>564</y><w>252</w><h>84</h></coordinates><panel_attributes>SoundSystem
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()</panel_attributes><additional_attributes></additional_attributes></element></diagram>
++turnOn()
++turnOff()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>492</x><y>180</y><w>252</w><h>48</h></coordinates><panel_attributes>Client
+--
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>612</x><y>216</y><w>36</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>276</x><y>444</y><w>360</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;100;280;10</additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>444</y><w>36</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>444</y><w>372</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>290;100;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>804</x><y>564</y><w>252</w><h>84</h></coordinates><panel_attributes>Lighting
+--
+--
++turnOn()
++turnOff()</panel_attributes><additional_attributes></additional_attributes></element></diagram>
