@@ -1,0 +1,22 @@
+<diagram program="umletino" version="15.1"><zoom_level>14</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>658</x><y>308</y><w>294</w><h>84</h></coordinates><panel_attributes>Strategy
+--
+--
+/+Execute()/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>784</x><y>378</y><w>42</w><h>126</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>504</x><y>462</y><w>602</w><h>126</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;10;10;410;10;410;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>924</x><y>560</y><w>294</w><h>84</h></coordinates><panel_attributes>Strgy_BigBloodVials
+--
+--
++Execute()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>364</x><y>546</y><w>294</w><h>84</h></coordinates><panel_attributes>Strgy_SmallBloodVials
+--
+--
++Execute()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>378</x><y>308</y><w>308</w><h>42</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>200;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>98</x><y>280</y><w>294</w><h>168</h></coordinates><panel_attributes>Character(Context Class)
+--
+-strgy: Strategy*
+--
++GetLife()
++SetLife()
++setStrategy()
++executeStrategy()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>630</x><y>308</y><w>56</w><h>42</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>238</x><y>406</y><w>84</w><h>98</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;50;40;10;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>126</x><y>476</y><w>196</w><h>56</h></coordinates><panel_attributes>strgy-&gt;Execute(this);
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element></diagram>

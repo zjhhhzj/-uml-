@@ -1,0 +1,29 @@
+<diagram program="umletino" version="15.1"><zoom_level>13</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>663</x><y>754</y><w>273</w><h>52</h></coordinates><panel_attributes>Character(Product)
+--
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>845</x><y>611</y><w>273</w><h>52</h></coordinates><panel_attributes>Chct_Mage 
+--
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>494</x><y>611</y><w>273</w><h>52</h></coordinates><panel_attributes>Chct_Warrior
+--
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>611</x><y>650</y><w>403</w><h>91</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;50;290;50;290;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>663</x><y>143</y><w>273</w><h>130</h></coordinates><panel_attributes>Builder
+--
+--
++GetResult()
+/+LoadTrunk()/
+/+LoadHead()/
+/+LoadLimbs()/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>793</x><y>260</y><w>39</w><h>78</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>611</x><y>286</y><w>403</w><h>91</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;50;10;20;290;20;290;50</additional_attributes></element><element><id>UMLClass</id><coordinates><x>481</x><y>351</y><w>273</w><h>130</h></coordinates><panel_attributes>Warrior_Builder
+--
+--
++LoadTrunk()
++LoadHead()
++LoadLimbs()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>845</x><y>351</y><w>273</w><h>130</h></coordinates><panel_attributes>Mage_Builder
+--
+--
++LoadTrunk()
++LoadHead()
++LoadLimbs()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>793</x><y>702</y><w>39</w><h>78</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>156</x><y>117</y><w>273</w><h>91</h></coordinates><panel_attributes>Director
+--
+-pBuilder:  Builder* 
+--
++Construct()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>221</x><y>234</y><w>195</w><h>78</h></coordinates><panel_attributes>pBuilder-&gt;LoadTrunk();
+pBuilder-&gt;LoadHead();
+pBuilder-&gt;LoadLimbs();</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>247</x><y>169</y><w>104</w><h>91</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>60;50;60;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>416</x><y>143</y><w>273</w><h>39</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>190;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>637</x><y>143</y><w>52</w><h>39</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>20;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>611</x><y>468</y><w>39</w><h>169</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>975</x><y>468</y><w>39</w><h>169</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element></diagram>

@@ -1,0 +1,22 @@
+<diagram program="umletino" version="15.1"><zoom_level>15</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>750</x><y>240</y><w>315</w><h>210</h></coordinates><panel_attributes>Observer
+--
+--
++GetGroup()
++GetName()
+/+publisher()/
++Notifier()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>885</x><y>435</y><w>45</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>495</y><w>315</w><h>75</h></coordinates><panel_attributes>ConcreteObserver
+--
+--
++publisher()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>195</x><y>240</y><w>315</w><h>135</h></coordinates><panel_attributes>Subject
+--
+--
+/+attach()/
+/+detach()/
+/+notify()/</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>450</y><w>315</w><h>135</h></coordinates><panel_attributes>ConcreteSubject
+--
+--
++attach()
++detach()
++notify()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>360</y><w>45</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>495</x><y>240</y><w>285</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>495</y><w>270</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>160;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>495</x><y>240</y><w>60</w><h>45</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;20;10</additional_attributes></element></diagram>

@@ -1,0 +1,18 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>650</x><y>250</y><w>210</w><h>60</h></coordinates><panel_attributes>Zombie
+--
+#life
+--
++Zombie()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>300</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>350</y><w>280</w><h>80</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;60;10;20;260;20</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>350</y><w>280</w><h>80</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;260;20;260;60</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>360</y><w>30</w><h>70</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;50</additional_attributes></element><element><id>UMLClass</id><coordinates><x>410</x><y>410</y><w>210</w><h>50</h></coordinates><panel_attributes>Zombie_Simple
+--
+--
++Zombie_Simple()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>650</x><y>410</y><w>210</w><h>50</h></coordinates><panel_attributes>Zombie_Villager
+--
+--
++Zombie_Villager()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>890</x><y>410</y><w>210</w><h>50</h></coordinates><panel_attributes>Zombie_Drowned
+--
+--
++Zombie_Drowned()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>250</y><w>210</w><h>70</h></coordinates><panel_attributes>Zombie_Factor
+--
++pZomb: Zombie*
+--
++Create_Zombie()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>310</y><w>240</w><h>210</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>220;150;220;190;10;190;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>450</y><w>30</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>230</x><y>310</y><w>550</w><h>250</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>530;150;530;230;10;220;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>170</x><y>310</y><w>860</w><h>280</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>840;150;840;260;10;250;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>450</y><w>30</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1000</x><y>450</y><w>30</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;20</additional_attributes></element></diagram>
