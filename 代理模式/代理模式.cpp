@@ -1,84 +1,72 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//为其他对象提供一种代理以控制对这个对象的访问。代理对象可以在不改变目标对象接口的情况下，控制、增强或简化对目标对象的访问
 
-// 定义角色类
-class Character
-{
+// Subject（抽象主题）定义目标对象和代理对象的公共接口，例如 request() 方法。
+// RealSubject（真实主题）实现目标对象的核心业务逻辑。
+// Proxy（代理类）持有对 RealSubject 的引用，通过代理对象控制对真实对象的访问。
+
+//举例(虚拟代理): 有一个图片加载的场景，通过代理模式可以在真正需要加载图片时才执行加载操作
+
+#include <iostream>
+#include <string>
+#include <memory>
+using namespace std;
+
+// 抽象主题接口
+class Image {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    virtual ~Image() = default;
+    virtual void display() = 0; // 显示图片
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
-public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
+// 真实主题类：负责加载和显示图片
+class RealImage : public Image {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
+    string filePath;
 
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    void loadFromDisk() {
+        cout << "Loading image from disk: " << filePath << endl;
     }
-    
+
+public:
+    RealImage(const string& filePath) : filePath(filePath) {
+        loadFromDisk(); // 构造时加载图片
+    }
+
+    void display() override {
+        cout << "Displaying image: " << filePath << endl;
+    }
+};
+
+// 代理类：控制对 RealImage 的访问
+class ProxyImage : public Image {
+private:
+    string filePath;
+    shared_ptr<RealImage> realImage; // 延迟加载的真实图片
+
+public:
+    ProxyImage(const string& filePath) : filePath(filePath), realImage(nullptr) {}
+
+    void display() override {
+        if (!realImage) {
+            // 延迟加载图片
+            realImage = make_shared<RealImage>(filePath);
+        }
+        realImage->display();
+    }
+};
+
+int main() {
+    // 创建代理对象
+    ProxyImage proxyImage("/example.jpg");
+
+    // 图片未加载，此时不会触发加载
+    cout << "Image not loaded yet." << endl;
+
+    // 第一次显示图片，触发加载
+    proxyImage.display();
+
+    // 第二次显示图片，不再加载
+    proxyImage.display();
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

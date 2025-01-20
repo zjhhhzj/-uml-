@@ -1,84 +1,64 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//通过共享尽可能多的对象来减少内存消耗。适用于有大量相似对象的场景，通过将可共享的部分抽取出来，避免重复创建相同的数据
 
-// 定义角色类
-class Character
-{
+// 内部状态类（Intrinsic State）:对象的共享部分，不随环境变化而变化。内部状态存储在享元对象内部，可以被多个对象共享。
+// 外部状态类（Extrinsic State）对象的非共享部分，随环境变化而变化。外部状态由客户端维护，并在使用时传递给享元对象。
+// 享元工厂（Flyweight Factory）管理和维护享元对象的创建和共享。确保相同的享元对象可以被重复使用。
+
+//举例，围棋棋盘上有黑子和白子
+
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <memory>
+using namespace std;
+
+// 抽象享元类
+class Flyweight {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    virtual ~Flyweight() = default;
+    virtual void operation(int x, int y) = 0; // 接收外部状态
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
-public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
+// 具体享元类：围棋棋子
+class ConcreteFlyweight : public Flyweight {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 法师角色
-class Chct_Mage : public Character
-{
+    string color; // 内部状态：棋子颜色
 public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    ConcreteFlyweight(const string& color) : color(color) {}
+    void operation(int x, int y) override {
+        cout << "Chess piece [" << color << "] placed at (" << x << ", " << y << ")." << endl;
     }
-    
+};
+
+// 享元工厂类
+class FlyweightFactory {
+private:
+    unordered_map<string, shared_ptr<Flyweight>> flyweights; // 享元池
+public:
+    shared_ptr<Flyweight> getFlyweight(const string& color) {
+        // 如果享元池中不存在该颜色的棋子，则创建新的享元对象
+        if (flyweights.find(color) == flyweights.end()) {
+            flyweights[color] = make_shared<ConcreteFlyweight>(color);
+            cout << "Creating new chess piece of color [" << color << "]." << endl;
+        }
+        return flyweights[color];
+    }
+};
+
+int main() {
+    FlyweightFactory factory;
+
+    // 获取黑色棋子
+    auto black1 = factory.getFlyweight("Black");
+    black1->operation(1, 1);
+
+    // 获取白色棋子
+    auto white1 = factory.getFlyweight("White");
+    white1->operation(2, 2);
+
+    // 再次获取黑色棋子（共享已有对象）
+    auto black2 = factory.getFlyweight("Black");
+    black2->operation(3, 3);
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

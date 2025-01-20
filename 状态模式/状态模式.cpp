@@ -1,84 +1,66 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//允许对象在其内部状态发生改变时改变其行为,将与状态相关的行为抽象到独立的状态类中，并通过状态对象的切换来改变对象的行为。
 
-// 定义角色类
-class Character
-{
-public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
+// Context（上下文）：维护当前状态的实例，并负责状态切换。
+// State（抽象状态）：定义状态的公共接口。
+// ConcreteState（具体状态）：实现具体状态的行为
 
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
+//举例，一个电灯有两种状态。每次按下开关时，电灯的状态会切换
 
-public:
-    virtual void Burn();              // 技能：燃烧
+#include <iostream>
+#include <memory>
+using namespace std;
 
+// 上下文类
+class Context {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
-};
-
-// 战士角色
-class Chct_Warrior : public Character
-{
+    shared_ptr<State> state; // 当前状态
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
+    Context(shared_ptr<State> initialState) : state(initialState) {}
 
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    void setState(shared_ptr<State> newState) {
+        state = newState;
     }
-    
+
+    void Request() {
+        state->Handle(this);
+    }
+};
+
+// 抽象状态类
+class State {
+public:
+    virtual ~State() = default;
+    virtual void Handle(class Context* context) = 0;
+};
+
+
+// 具体状态：开
+class OnState : public State {
+public:
+    void Handle(Context* context) override {
+        cout << "Turning light off." << endl;
+        context->setState(make_shared<OffState>());
+    }
+};
+
+// 具体状态：关
+class OffState : public State {
+public:
+    void Handle(Context* context) override {
+        cout << "Turning light on." << endl;
+        context->setState(make_shared<OnState>());
+    }
+};
+
+// 客户端代码
+int main() {
+    auto initialState = make_shared<OffState>();
+    Context light(initialState);
+
+    // 模拟按下开关
+    light.Request(); // Turning light on.
+    light.Request(); // Turning light off.
+    light.Request(); // Turning light on.
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

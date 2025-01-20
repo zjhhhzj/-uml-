@@ -1,22 +1,21 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>480</x><y>230</y><w>210</w><h>140</h></coordinates><panel_attributes>Character
---
-#life
-#magic
-#attack
---
-+Burn()
-/-Can_Use()/
-/-Effect_Enemy()/
-/-Effect_Self()/
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>360</y><w>30</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>430</y><w>430</w><h>90</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;10;10;410;10;410;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>670</x><y>500</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Mage
+<diagram program="umletino" version="15.1"><zoom_level>11</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>198</x><y>253</y><w>231</w><h>66</h></coordinates><panel_attributes>Color 
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>490</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Warrior
+/+fill()/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>308</y><w>33</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>154</x><y>385</y><w>176</w><h>88</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;140;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>363</x><y>451</y><w>231</w><h>66</h></coordinates><panel_attributes>Blue
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()</panel_attributes><additional_attributes></additional_attributes></element></diagram>
++fill()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>44</x><y>451</y><w>231</w><h>66</h></coordinates><panel_attributes>Red
+--
+--
++fill()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>297</x><y>385</y><w>209</w><h>88</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;170;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>803</x><y>242</y><w>231</w><h>77</h></coordinates><panel_attributes>Shape
+--
+#color: Color* 
+--
+/+draw()/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>902</x><y>308</y><w>33</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>902</x><y>385</y><w>209</w><h>88</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;170;60</additional_attributes></element><element><id>Relation</id><coordinates><x>759</x><y>385</y><w>176</w><h>88</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;140;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>968</x><y>451</y><w>231</w><h>66</h></coordinates><panel_attributes>Square
+--
+--
++draw()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>649</x><y>451</y><w>231</w><h>66</h></coordinates><panel_attributes>Circle
+--
+--
++draw()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>418</x><y>286</y><w>407</w><h>33</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;350;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>561</x><y>242</y><w>132</w><h>44</h></coordinates><panel_attributes>桥</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>693</x><y>473</y><w>253</w><h>121</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>210;90;210;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>913</x><y>473</y><w>165</w><h>121</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;90;10;60;130;60;130;10;100;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>847</x><y>572</y><w>154</w><h>33</h></coordinates><panel_attributes>color-&gt;fill()
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element></diagram>

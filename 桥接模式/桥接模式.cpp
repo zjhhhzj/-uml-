@@ -1,84 +1,86 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
-//举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
+//通过将抽象部分与实现部分分离，使它们可以独立变化。核心思想是将类的抽象和实现解耦，使得可以独立扩展，而不是通过继承绑定在一起
+//体现在多个独立变化维度的业务需求
 
-// 定义角色类
-class Character
-{
+// Abstraction（抽象类）：定义高层抽象接口，维护一个对实现部分的引用。
+// RefinedAbstraction（扩展抽象类）：扩展抽象类的接口。
+// Implementor（实现接口）：定义实现部分的接口。
+// ConcreteImplementor（具体实现类）：实现 Implementor 接口。
+
+//举例，需要绘制形状（如圆形和正方形），同时形状可以有不同的颜色（如红色和蓝色）。通过桥接模式，我们将形状的抽象与颜色的实现分离
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 实现接口：颜色
+class Color {
 public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
-
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
+    virtual ~Color() = default;
+    virtual string fill() const = 0; // 返回颜色的描述
 };
 
-// 战士角色
-class Chct_Warrior : public Character
-{
+// 具体实现类：红色
+class Red : public Color {
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    string fill() const override {
+        return "Red";
     }
-    
+};
+
+// 具体实现类：蓝色
+class Blue : public Color {
+public:
+    string fill() const override {
+        return "Blue";
+    }
+};
+
+// 抽象类：形状
+class Shape {
+protected:
+    Color* color; // 颜色的实现部分
+public:
+    Shape(Color* c) : color(c) {}
+    virtual ~Shape() = default;
+    virtual void draw() const = 0; // 绘制形状
+};
+
+// 扩展抽象类：圆形
+class Circle : public Shape {
+public:
+    Circle(Color* c) : Shape(c) {}
+    void draw() const override {
+        cout << "Drawing a Circle in " << color->fill() << " color." << endl;
+    }
+};
+
+// 扩展抽象类：正方形
+class Square : public Shape {
+public:
+    Square(Color* c) : Shape(c) {}
+    void draw() const override {
+        cout << "Drawing a Square in " << color->fill() << " color." << endl;
+    }
+};
+
+int main() {
+    // 创建颜色
+    Color* red = new Red();
+    Color* blue = new Blue();
+
+    // 创建形状并为其赋予颜色
+    Shape* redCircle = new Circle(red);
+    Shape* blueSquare = new Square(blue);
+
+    // 绘制形状
+    redCircle->draw();
+    blueSquare->draw();
+
+    // 释放内存
+    delete redCircle;
+    delete blueSquare;
+    delete red;
+    delete blue;
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};

@@ -1,3 +1,11 @@
+// 将一组对象组织成树形结构以表示“部分-整体”的层次结构。组合模式使得客户端对单个对象和组合对象的使用具有一致性
+
+// Component（抽象组件）：定义了组合对象和单个对象的公共接口。
+// Leaf（叶子节点）：表示树的叶子节点。
+// Composite（组合节点）：表示树的非叶子节点，可以包含子节点（既可以是叶子节点，也可以是其他组合节点）。
+
+// 举例，文件系统
+
 // 将对象组织成树形结构以表示“部分-整体”的层次结构。组合模式使得客户端对单个对象和组合对象的使用具有一致性
 
 // Component（抽象组件）：定义了组合对象和单个对象的公共接口。
@@ -24,7 +32,7 @@ public:
     FileSystemComponent(const string &name) : name(name) {}
     virtual ~FileSystemComponent() = default;
 
-    // 纯虚函数，定义接口
+    // 纯虚函数，定义接口（透明）
     virtual void display(int level=0) = 0;
     virtual void add(shared_ptr<FileSystemComponent>) = 0;
     virtual void del(shared_ptr<FileSystemComponent>) = 0;
@@ -83,28 +91,22 @@ public:
 // 客户端代码
 int main()
 {
-    FileSystemComponent* f1=new Folder("f1");
-    FileSystemComponent* f2=new Folder("f2");
-    FileSystemComponent* f3=new Folder("f3");
+    auto f1 = make_shared<Folder>("f1");
+    auto f2 = make_shared<Folder>("f2");
+    auto f3 = make_shared<Folder>("f3");
 
-    FileSystemComponent* f21=new File("f21");
-    FileSystemComponent* f22=new File("f22");
-    FileSystemComponent* f31=new File("f31");
+    auto f21 = make_shared<File>("f21");
+    auto f22 = make_shared<File>("f22");
+    auto f31 = make_shared<File>("f31");
 
-    f1->add(shared_ptr<FileSystemComponent>(f2));
-    f1->add(shared_ptr<FileSystemComponent>(f3));
-    f2->add(shared_ptr<FileSystemComponent>(f21));
-    f2->add(shared_ptr<FileSystemComponent>(f22));
-    f3->add(shared_ptr<FileSystemComponent>(f31));
+    f1->add(f2);
+    f1->add(f3);
+    f2->add(f21);
+    f2->add(f22);
+    f3->add(f31);
 
     // 显示整个文件系统结构
     f1->display();
 
-    delete f1;
-    delete f2;
-    delete f3;
-    delete f21;
-    delete f22;
-    delete f31;
     return 0;
 }

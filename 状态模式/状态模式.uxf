@@ -1,22 +1,16 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>480</x><y>230</y><w>210</w><h>140</h></coordinates><panel_attributes>Character
---
-#life
-#magic
-#attack
---
-+Burn()
-/-Can_Use()/
-/-Effect_Enemy()/
-/-Effect_Self()/
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>360</y><w>30</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>430</y><w>430</w><h>90</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;10;10;410;10;410;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>670</x><y>500</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Mage
+<diagram program="umletino" version="15.1"><zoom_level>14</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>630</x><y>322</y><w>294</w><h>84</h></coordinates><panel_attributes>State
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>490</y><w>210</w><h>140</h></coordinates><panel_attributes>Chct_Warrior
+/+handle()/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>756</x><y>392</y><w>42</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>504</x><y>490</y><w>532</w><h>112</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;60;10;10;360;10;360;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>854</x><y>574</y><w>294</w><h>84</h></coordinates><panel_attributes>OffState
 --
 --
--Can_Use()
--Effect_Enemy()
--Effect_Self()</panel_attributes><additional_attributes></additional_attributes></element></diagram>
++handle()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>364</x><y>574</y><w>294</w><h>84</h></coordinates><panel_attributes>OnState
+--
+--
++handle()</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>154</x><y>294</y><w>294</w><h>126</h></coordinates><panel_attributes>Context
+--
+-state: shared_ptr&lt;State&gt; 
+--
++setState()
++request()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>434</x><y>322</y><w>224</w><h>42</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>140;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>238</x><y>378</y><w>140</w><h>98</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>60;50;80;10;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>224</x><y>448</y><w>196</w><h>42</h></coordinates><panel_attributes>state-&gt;Handle(this);
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element></diagram>
