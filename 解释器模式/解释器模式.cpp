@@ -1,84 +1,110 @@
-//定义了一个操作中的算法框架，而将一些步骤的实现延迟到子类中。通过模板方法，子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。
-//钩子方法：子类提供一种扩展或定制(控制)父类行为的机制，同时保持父类的整体算法结构不变（下面的Can_Use函数）。
+//用于定义语言的语法表示，并实现一个解释器来解释这些语法表达式。它适用于某些特定领域的语言处理，能够将问题分解为一系列的表达式，从而解决复杂的计算或逻辑问题
+
+// AbstractExpression（抽象表达式）：定义解释操作的接口。
+// TerminalExpression（终结符表达式）：实现与语法规则相关的操作，通常是语法树的叶子节点。
+// NonTerminalExpression（非终结符表达式）：表示语法规则中非终结符的部分，通常是语法树的内部节点。
+// Context（上下文）：包含解释器的全局信息，例如输入字符串或变量的值。
+// Client（客户端）：构建语法树，并调用解释器解释语法树。
+
 //举例，技能燃烧在不同角色中采取相同算法（函数）而具体行为不一致
 
-// 定义角色类
-class Character
-{
-public:
-    Character(int life, int magic, int attack) : life(life), magic(magic), attack(attack) {};
-    virtual ~Character() {};
+#include <iostream>
+#include <string>
+#include <memory>
+#include <map>
+#include <stack>
+using namespace std;
 
-protected:
-    // 角色属性值
-    int life;   // 生命值
-    int magic;  // 魔法值
-    int attack; // 攻击力
-
-public:
-    virtual void Burn();              // 技能：燃烧
-
+// 上下文类
+class Context {
 private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy() = 0;  // 对敌人影响
-    virtual void Effect_Self() = 0;   // 对自身影响
-};
-
-// 战士角色
-class Chct_Warrior : public Character
-{
+    map<string, int> variables;
 public:
-    Chct_Warrior(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Warrior();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 法师角色
-class Chct_Mage : public Character
-{
-public:
-    Chct_Mage(int life, int magic, int attack) : Character(life, magic, attack) {};
-    virtual ~Chct_Mage();
-private:
-    virtual bool Can_Use() = 0;       // 条件是否满足
-    virtual void Effect_Enemy();  // 对敌人影响
-    virtual void Effect_Self();   // 对自身影响
-};
-
-// 父类定义算法框架：算法的整体逻辑由父类控制。
-void Character::Burn()
-{   
-    if(Can_Use()){
-        Effect_Enemy();
-        Effect_Self();
+    void setVariable(const string& name, int value) {
+        variables[name] = value;
     }
-    
+
+    int getVariable(const string& name) const {
+        return variables.at(name);//如果键不存在，会抛出 std::out_of_range 异常
+    }
+};
+
+// 抽象表达式类
+class Expression {
+public:
+    virtual int interpret(const Context& context) const = 0;
+    virtual ~Expression() = default;
+};
+
+// 终结符表达式：变量
+class VariableExpression : public Expression {
+private:
+    string name;
+public:
+    explicit VariableExpression(const string& varName) : name(varName) {}
+
+    int interpret(const Context& context) const override {
+        return context.getVariable(name);
+    }
+};
+
+// 终结符表达式：常量
+class ConstantExpression : public Expression {
+private:
+    int value;
+public:
+    explicit ConstantExpression(int val) : value(val) {}
+
+    int interpret(const Context& context) const override {
+        return value;
+    }
+};
+
+// 非终结符表达式：加法
+class AddExpression : public Expression {
+private:
+    shared_ptr<Expression> left;
+    shared_ptr<Expression> right;
+public:
+    AddExpression(shared_ptr<Expression> leftExpr, shared_ptr<Expression> rightExpr)
+        : left(move(leftExpr)), right(move(rightExpr)) {}
+
+    int interpret(const Context& context) const override {
+        return left->interpret(context) + right->interpret(context);
+    }
+};
+
+// 非终结符表达式：减法
+class SubtractExpression : public Expression {
+private:
+    shared_ptr<Expression> left;
+    shared_ptr<Expression> right;
+public:
+    SubtractExpression(shared_ptr<Expression> leftExpr, shared_ptr<Expression> rightExpr)
+        : left(move(leftExpr)), right(move(rightExpr)) {}
+
+    int interpret(const Context& context) const override {
+        return left->interpret(context) - right->interpret(context);
+    }
+};
+
+int main() {
+    // 创建上下文并设置变量
+    Context context;
+    context.setVariable("x", 10);
+    context.setVariable("y", 20);
+
+    // 构建表达式：x + y - 5
+    shared_ptr<Expression> expression = make_shared<SubtractExpression>(
+        make_shared<AddExpression>(
+            make_shared<VariableExpression>("x"),
+            make_shared<VariableExpression>("y")
+        ),
+        make_shared<ConstantExpression>(5)
+    );
+
+    // 解释表达式
+    cout << "Result: " << expression->interpret(context) << endl;
+
+    return 0;
 }
-
-// 子类实现具体步骤：某些具体步骤的实现由子类完成。
-bool Chct_Warrior::Can_Use() {
-    if(life>100)return true;
-    return false;
-};
-void Chct_Warrior::Effect_Enemy() 
-{
-    //敌人生命值减少600
-};
-void Chct_Warrior::Effect_Self() {
-    life-=100;//自身生命值减少400
-};
-
-bool Chct_Mage::Can_Use() {
-    if(magic>200)return true;
-    return false;
-};
-void Chct_Mage::Effect_Enemy() 
-{
-    //敌人生命值减少1000
-};
-void Chct_Mage::Effect_Self() {
-    magic-=100;//自身魔法值减少200
-};
