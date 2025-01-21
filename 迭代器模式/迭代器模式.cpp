@@ -24,9 +24,9 @@ template <typename T>
 class Aggregate
 {
 public:
-    virtual Iterator<T>* createIterator() = 0;
+    virtual Iterator<T> *createIterator() = 0;
     virtual int GetSize() = 0;
-    virtual T& GetItem(int index) = 0;
+    virtual T &GetItem(int index) = 0;
 };
 
 // 具体迭代器
@@ -87,8 +87,8 @@ int main()
     Aggregate<int> *pAgg = new ConcreteAggregate<int>;
     Iterator<int> *iter = pAgg->createIterator();
 
-    for(iter->First();!iter->IsEnd();iter->Next())      //访问
-        iter->Get()++;                                  //操作
+    for (iter->First(); !iter->IsEnd(); iter->Next()) // 访问
+        iter->Get()++;                                // 操作
 
     delete pAgg;
     delete iter;
