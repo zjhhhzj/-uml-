@@ -25,7 +25,7 @@ public:
     virtual ~FileSystemComponent() = default;
 
     // 纯虚函数，定义接口（透明）
-    virtual void display(int level=0) = 0;
+    virtual void display(int level = 0) = 0;
     virtual void add(shared_ptr<FileSystemComponent>) = 0;
     virtual void del(shared_ptr<FileSystemComponent>) = 0;
 };
@@ -34,17 +34,19 @@ public:
 class File : public FileSystemComponent
 {
 public:
-    File(const string &name) :FileSystemComponent(name) {}
+    File(const string &name) : FileSystemComponent(name) {}
     void display(int level = 0) override
     {
         for (int i = 1; i <= level; i++)
             cout << "    ";
         cout << '-' << name << '\n';
     }
-    void add(shared_ptr<FileSystemComponent>) override{
+    void add(shared_ptr<FileSystemComponent>) override
+    {
         throw logic_error("Its File");
     }
-    void del(shared_ptr<FileSystemComponent>) override{
+    void del(shared_ptr<FileSystemComponent>) override
+    {
         throw logic_error("Its File");
     }
 };
@@ -72,8 +74,8 @@ public:
     {
         for (int i = 1; i <= level; i++)
             cout << "    ";
-        cout<<'+'<<name<<'\n';
-        for (auto& iter : children)
+        cout << '+' << name << '\n';
+        for (auto &iter : children)
         {
             iter->display(level + 1);
         }

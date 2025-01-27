@@ -1,59 +1,67 @@
-//允许对象在其内部状态发生改变时改变其行为,将与状态相关的行为抽象到独立的状态类中，并通过状态对象的切换来改变对象的行为。
+// 允许对象在其内部状态发生改变时改变其行为,将与状态相关的行为抽象到独立的状态类中，并通过状态对象的切换来改变对象的行为。
 
 // Context（上下文）：维护当前状态的实例，并负责状态切换。
 // State（抽象状态）：定义状态的公共接口。
 // ConcreteState（具体状态）：实现具体状态的行为
 
-//举例，一个电灯有两种状态。每次按下开关时，电灯的状态会切换
+// 举例，一个电灯有两种状态。每次按下开关时，电灯的状态会切换
 
 #include <iostream>
 #include <memory>
 using namespace std;
 
 // 上下文类
-class Context {
+class Context
+{
 private:
     shared_ptr<State> state; // 当前状态
 public:
     Context(shared_ptr<State> initialState) : state(initialState) {}
 
-    void setState(shared_ptr<State> newState) {
+    void setState(shared_ptr<State> newState)
+    {
         state = newState;
     }
 
-    void Request() {
+    void Request()
+    {
         state->Handle(this);
     }
 };
 
 // 抽象状态类
-class State {
+class State
+{
 public:
     virtual ~State() = default;
-    virtual void Handle(class Context* context) = 0;
+    virtual void Handle(class Context *context) = 0;
 };
 
-
 // 具体状态：开
-class OnState : public State {
+class OnState : public State
+{
 public:
-    void Handle(Context* context) override {
+    void Handle(Context *context) override
+    {
         cout << "Turning light off." << endl;
         context->setState(make_shared<OffState>());
     }
 };
 
 // 具体状态：关
-class OffState : public State {
+class OffState : public State
+{
 public:
-    void Handle(Context* context) override {
+    void Handle(Context *context) override
+    {
         cout << "Turning light on." << endl;
         context->setState(make_shared<OnState>());
     }
 };
 
 // 客户端代码
-int main() {
+int main()
+{
     auto initialState = make_shared<OffState>();
     Context light(initialState);
 
